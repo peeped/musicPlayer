@@ -291,7 +291,7 @@ class MusicWidget(QWidget):
     #画按钮的图标 循环  随机 预览 清空列表 增加文件夹 增加文件  ==>>
         #画试听图标
         if self.homeAction.isPreview:
-            if pastTime >10:
+            if pastTime >10*1000:
                 self.homeAction.nextPlay()
             if int(pastTime)%2 == 0:
                 #print("偶数",int(pastTime)%2)
