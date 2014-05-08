@@ -19,13 +19,13 @@ class ButtonPixmap(QGraphicsObject):
         return QRectF(QPointF(0, 0), QSizeF(self.p.size()))
 
     def mousePressEvent(self, event):
-        print("鼠标按下:::",self.name)
-        self.clicked.emit(self.name,"鼠标按下")
+        #print("鼠标按下:::",self.name)
+        self.clicked.emit(self.name,"press")
         event.accept()
-    # def mouseReleaseEvent(self, event):
-    #     print("鼠标释放:::",self.name)
-        # self.clicked.emit(self.name,"鼠标释放")
-        # event.accept()
+    def mouseReleaseEvent(self, event):
+        #print("鼠标释放:::",self.name)
+        self.clicked.emit(self.name,"release")
+        event.accept()
 
     def setGeometry(self, rect):
         super(ButtonPixmap, self).setGeometry(rect)

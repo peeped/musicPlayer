@@ -6,7 +6,7 @@ from PyQt5.QtGui import  (QImage,QPixmap,QPainter,QColor,QIcon,QPen,QBrush)
 from PyQt5.QtCore import QByteArray, QIODevice, Qt, QTimer, QUrl
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaPlaylist)
-
+import time
 # import win32gui
 #==========自定义包
 #from colors import Colors
@@ -77,7 +77,7 @@ class Ui_MainWindow(QGraphicsView):
                             'raisevol':lambda :self.homeAction.raisevolPlay(),
                             'settings':lambda :self.homeAction.testPlay(),
                             'muteStat':lambda :self.muteEvent(),
-                            'pause':lambda :self.playEvent(),
+                            'pause':lambda :self.homeAction.playORpause(),
                             'quit':lambda :self.sysQuit(),
                             'back':lambda :self.backEvent(),
                             'calendar':lambda :self.calendarEvent(),
@@ -105,7 +105,7 @@ class Ui_MainWindow(QGraphicsView):
         rewind  = ButtonPixmap(QPixmap('%simg/player/rewind.png' % (colors.SYSPATH)),"rewind")
         self.buttonList.append(rewind)
         #底部按钮::播放
-        play  = ButtonPixmap(QPixmap('%simg/player/play.png' % (colors.SYSPATH)),"play")
+        play  = ButtonPixmap(QPixmap('%simg/player/new_play.png' % (colors.SYSPATH)),"play")
         self.buttonList.append(play)
         #底部按钮::快进
         forward  = ButtonPixmap(QPixmap('%simg/player/forward.png' % (colors.SYSPATH)),'forward')
@@ -136,19 +136,80 @@ class Ui_MainWindow(QGraphicsView):
             self.buttonList[i].clicked.connect(self.setValue_OneParameter,Qt.QueuedConnection)
 
         #执行主状态机
-        #self.setMachine()
 
-        self.muteStatView = ButtonPixmap(QPixmap('%simg/player/menuStat.png' % (colors.SYSPATH)),"muteStat")
-        self.muteStatView.setObjectName("muteStat")
-        self.muteStatView.setPos(QPointF(70, 449))
+        #按钮状态索引
+        self.buttonStatList = {}
+        muteStatView = ButtonPixmap(QPixmap('%simg/player/menuStat.png' % (colors.SYSPATH)),"muteStat")
+        #muteStatView.setObjectName("muteStat")
+        muteStatView.setPos(QPointF(70, 449))
+        self.buttonStatList["mute"] =  muteStatView
+        #音量减状态
+        lowervolStat = ButtonPixmap(QPixmap('%simg/player/lowervol_status.png' % (colors.SYSPATH)),"lowervolStat")
+        lowervolStat.setPos(QPointF(147, 441))
+        self.buttonStatList["lowervol"] =  lowervolStat
+        #上一首状态
+        prevStat = ButtonPixmap(QPixmap('%simg/player/prev_status.png' % (colors.SYSPATH)),"prevStat")
+        prevStat.setPos(QPointF(227, 441))
+        self.buttonStatList["prev"] =  prevStat
+        #快退状态
+        rewindStat = ButtonPixmap(QPixmap('%simg/player/rewind_status.png' % (colors.SYSPATH)),"rewindStat")
+        rewindStat.setPos(QPointF(307, 441))
+        self.buttonStatList["rewind"] =  rewindStat
+        #播放状态
+
+        #快进状态
+        forwardStat = ButtonPixmap(QPixmap('%simg/player/forward_status.png' % (colors.SYSPATH)),"forwardStat")
+        forwardStat.setPos(QPointF(467, 441))
+        self.buttonStatList["forward"] =  forwardStat
+        #下一首状态
+        nextStat = ButtonPixmap(QPixmap('%simg/player/forward_status.png' % (colors.SYSPATH)),"nextStat")
+        nextStat.setPos(QPointF(547, 441))
+        self.buttonStatList["next"] =  nextStat
+        #音量加状态
+        raisevolStat = ButtonPixmap(QPixmap('%simg/player/raisevol_status.png' % (colors.SYSPATH)),"raisevolStat")
+        raisevolStat.setPos(QPointF(627, 441))
+        self.buttonStatList["raisevol"] =  raisevolStat
+        #设置状态
+        settingsStat = ButtonPixmap(QPixmap('%simg/player/settings_status.png' % (colors.SYSPATH)),"settingsStat")
+        settingsStat.setPos(QPointF(707, 441))
+        self.buttonStatList["settings"] =  settingsStat
+        #播放时点击状态
+        playStat = ButtonPixmap(QPixmap('%simg/player/new_play_to_pause.png' % (colors.SYSPATH)),"playStat")
+        playStat.setPos(QPointF(360, 430))
+        self.buttonStatList["play"] =  playStat
+        #暂停时点击状态
+        pauseStat = ButtonPixmap(QPixmap('%simg/player/new_pause_to_play.png' % (colors.SYSPATH)),"pauseStat")
+        pauseStat.setPos(QPointF(360, 430))
+        self.buttonStatList["pause"] =  pauseStat
+        ########################
+        ########################
+        ########################
+        #暂停图标
+        self.pause = ButtonPixmap(QPixmap('%simg/player/new_pause.png' % (colors.SYSPATH)),"pause")
+        self.pause.setObjectName("pause")
+        self.pause.setPos(QPointF(800, 430))
+        self.scene().addItem(self.pause)
+        self.pause.clicked.connect(self.setValue_OneParameter,Qt.QueuedConnection)
+        #静音图标
+        self.muteStatViews = ButtonPixmap(QPixmap('%simg/player/menuStat.png' % (colors.SYSPATH)),"muteStats")
+        self.muteStatViews.setObjectName("muteStats")
+        self.muteStatViews.setPos(QPointF(70, 449))
+        self.scene().addItem(self.muteStatViews)
+        self.muteStatViews.clicked.connect(self.setValue_OneParameter,Qt.QueuedConnection)
+
+        #视窗刷新开始(调用状态检测方法)
+        self.isStatTimer = QTimer()
+        self.isStatTimer.timeout.connect(self.isStat)
+        self.isStatTimer.start(30)
 
     @pyqtSlot(str,str)
     def setValue_OneParameter(self,nIndex,type):
-        print("aaaaaaaaaaaaaaaaaaaaaaaaa",nIndex,type)
         try:
-            # if type=="鼠标释放":
-            print("aaaaa::::",nIndex)
-            self.command_dic[nIndex]()
+            if type=="release":
+                self.command_dic[nIndex]()
+                self.delItem(nIndex)
+            if type=="press":
+                self.loadItem(nIndex)
         except EOFError:
             print("no such command.",EOFError)
 
@@ -159,6 +220,27 @@ class Ui_MainWindow(QGraphicsView):
         else:
             self.showFullScreen()
 
+    def loadItem(self,itemName):#点击按钮时载入
+        self.scene().addItem(self.buttonStatList[itemName])
+    def delItem(self,itemName):#松开鼠标时移出
+        self.scene().removeItem(self.buttonStatList[itemName])
+
+    #播放和暂停 与静音状态
+    def isStat(self):
+        if self.homeAction.playObj.state() == 1:
+            self.buttonList[4].setPos(QPointF(360, 429))
+            self.pause.setPos(QPointF(800, 430))
+        else:
+            self.pause.setPos(QPointF(360, 430))
+            self.buttonList[4].setPos(QPointF(800, 430))
+
+        if self.homeAction.playObj.isMuted():
+            if int(time.time())%2:
+                self.muteStatViews.setPos(QPointF(70, 449))
+            else:
+                self.muteStatViews.setPos(QPointF(800, 449))
+        else:
+            self.muteStatViews.setPos(QPointF(800, 449))
     #绘制背景像素图
     def drawBackgroundToPixmap(self):
         r = self.sceneRect()
