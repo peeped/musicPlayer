@@ -60,28 +60,9 @@ class Ui_MainWindow(QGraphicsView):
         self.homeAction.initPlay()
         #初始化播放<<==
 
-        #self.homeAction.nextPlay()
-        # player = QMediaPlayer()
-        # player.setMedia(QMediaContent(QUrl.fromLocalFile("E:/mp3/蒋雅文-爱的故事上集.mp3")))
-        # player.setVolume(50)
-        # # player.setMuted(False)
-        # player.play()
-        # player.position()
-        #######################模块/api
-        ##操作参数载入
-        #self.mod = MainMod(self)
-
-        #启动默认预载程序
-        #self.starting = ButtonPixmap(QPixmap(Colors.ImgPath+'main/starting.png'),"starting")
-        #xOff = (self.sceneRect().width()-self.starting.boundingRect().width())/2
-        #yOff = (self.sceneRect().height()- self.starting.boundingRect().height())/2
-        #self.starting.setPos(QPointF(xOff,yOff))
-        #播放界面UI
+        #载入播放界面UI
         musicPlayWidget = MusicWidget(self.homeAction)
         self.scene().addWidget(musicPlayWidget)
-        #self.startTimer = QTimer()
-        #self.startTimer.timeout.connect(self.defaultMod)
-        #self.startTimer.start(30)
 
         #按钮索引
         self.buttonList = []
@@ -161,12 +142,6 @@ class Ui_MainWindow(QGraphicsView):
         self.muteStatView.setObjectName("muteStat")
         self.muteStatView.setPos(QPointF(70, 449))
 
-    #def mouseReleaseEvent(self, QMouseEvent):
-    #    print("鼠标释放")
-    #    #self.scene().addItem(self.muteStatView)
-    #    self.scene().removeItem(self.muteStatView)
-
-
     @pyqtSlot(str,str)
     def setValue_OneParameter(self,nIndex,type):
         print("aaaaaaaaaaaaaaaaaaaaaaaaa",nIndex,type)
@@ -183,18 +158,6 @@ class Ui_MainWindow(QGraphicsView):
             self.showNormal()
         else:
             self.showFullScreen()
-
-
-    #def mouseDoubleClickEvent(self, QMouseEvent):
-    #    print("鼠标双击")
-    ##def mouseMoveEvent(self, QMouseEvent):
-    ##    print("鼠标移动")
-    #def mouseReleaseEvent(self, QMouseEvent):
-    #    print("鼠标释放")
-    #def mousePressEvent(self, QMouseEvent):
-    #    print("鼠标按下")
-
-
 
     #绘制背景像素图
     def drawBackgroundToPixmap(self):
@@ -256,14 +219,3 @@ class Ui_MainWindow(QGraphicsView):
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
-    #def defaultMod(self):
-    #    #self.scene().addText("正在启动预设程序……")
-    #    if Colors.WinampID ==0:
-    #        Colors.WinampID = win32gui.FindWindow('Winamp v1.x', None)
-    #        self.mod.w.hWinamp = Colors.WinampID
-    #    else:
-    #        self.startTimer.stop()
-    #        #移出程序启动中图
-    #        self.starting.setPos(QPointF(800,self.starting.boundingRect().height()))
-    #        #载入主场景UI
-    #        self.mainUi = MainUi(self)

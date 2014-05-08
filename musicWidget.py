@@ -31,6 +31,7 @@ class MusicWidget(QWidget):
         #歌曲列表界面
         self.tracksList = TracksList(self)
 
+
     def setMousePot(self):
         #按钮焦点
         self.buttonCoordinate=[]
@@ -119,7 +120,7 @@ class MusicWidget(QWidget):
             if downPos<0:
                 downPos=0
             self.tracksList.verticalScrollBar().setValue(downPos)
-    
+
     def paintEvent(self, event):
         painter=QPainter(self)
         #设置渲染:开启抗锯齿,老机器很占cpu!
@@ -153,7 +154,6 @@ class MusicWidget(QWidget):
 
     #记录播放信息==>>
         colors.CONFIGFILE.set("Save","soundID",str(self.homeAction.soundID))
-        # colors.CONFIGFILE.set("Save","playStat",str(self.homeAction.playObj.playing))
         if self.homeAction.playObj.state()==1:
             playStat="True"
         else:

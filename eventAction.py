@@ -69,8 +69,6 @@ class EventAction():
 
     #播放
     def play(self,i):
-        if i<0 or i>=len(self.randomList):
-            i=0
         source = self.openPath + self.fileList[i]
         self.playObj.setMedia(QMediaContent(QUrl.fromLocalFile(source)))
         self.playObj.play()
@@ -79,14 +77,40 @@ class EventAction():
         #ps =QMediaMetaData()
         #print("QMediaMetaData",ps)
         print("metaData",self.playObj.metaData(QMediaMetaData.Title))
-        
+        print("position",self.playObj.position())
+        print("playlist",self.playObj.playlist)
+        print("availability",self.playObj.availability())
+        print("bufferStatus",self.playObj.bufferStatus())
+        print("currentMedia",self.playObj.currentMedia())
+        print("currentNetworkConfiguration",self.playObj.currentNetworkConfiguration())
+        print("duration",self.playObj.duration())
+        print("error",self.playObj.error())
+        print("errorString",self.playObj.errorString())
+        print("isAudioAvailable",self.playObj.isAudioAvailable())
+        print("isMuted",self.playObj.isMuted())
+        print("isSeekable",self.playObj.isSeekable())
+        print("media",self.playObj.media())
+        print("media:::::::A",self.playObj.media().canonicalResource().audioBitRate())
+        print("media:::::::B",self.playObj.media().canonicalResource().audioCodec())
+        print("media:::::::C",self.playObj.media().canonicalResource().channelCount())
+        print("media:::::::D",self.playObj.media().canonicalResource().dataSize())
+        print("media:::::::e",self.playObj.media().canonicalResource().isNull())
+        print("media:::::::f",self.playObj.media().canonicalResource().language())
+        print("media:::::::g",self.playObj.media().canonicalResource().mimeType())
+        print("media:::::::h",self.playObj.media().canonicalResource().request())
+        print("isVideoAvailable",self.playObj.isVideoAvailable())
+        print("mediaStatus",self.playObj.mediaStatus())
+        print("mediaStream",self.playObj.mediaStream())
+        print("playbackRate",self.playObj.playbackRate())
+        print("state",self.playObj.state())
+        print("volume",self.playObj.volume())
+        # print("volume",self.playObj.filename)
 
 
 
     #换歌之前先停止，释放内存
-    def stopPlay(self):       
+    def stopPlay(self):
         self.playObj.pause()
-        
 
     #上一首
     def prevPlay(self):
