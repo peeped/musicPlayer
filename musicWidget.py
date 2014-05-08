@@ -31,55 +31,6 @@ class MusicWidget(QWidget):
         #歌曲列表界面
         self.tracksList = TracksList(self)
 
-        #print(self.homeAction.fileList,"\n",  self.homeAction.randomList)
-    ##计算桌面矩型
-    #def countWwindowRect(self):
-    #    #获取系统桌面尺寸大小
-    #    desktop = QApplication.desktop()
-    #    screenRect = desktop.screenGeometry(desktop.primaryScreen())
-    #    #窗口默认尺寸
-    #    windowRect = QRect(0, 0, 800,480)
-    #    #如果系统桌面宽小于默认值，窗口宽度将被设为系统桌面的宽度
-    #    if screenRect.width() < 800:
-    #        windowRect.setWidth(screenRect.width())
-    #    #如果系统桌面高小于默认值，窗口高度将被设为系统桌面的高度
-    #    if screenRect.height() < 480:
-    #        windowRect.setHeight(screenRect.height())
-    #    #移动中心点为系统中心点
-    #    windowRect.moveCenter(screenRect.center())
-    #    self.windowRect = windowRect
-
-        ##设置按钮焦点
-        #self.setMousePot()
-
-        ##播放(排序ID)
-        #self.soundID=0
-        ##播放表序
-        #self.queue=[]
-
-        #-------<
-        #self.filePath=filePath
-        #self.fileList = fileList
-        #print(self.fileList)
-        #self.config=configparser.ConfigParser()
-        #self.config.read('config.ini')
-
-
-
-        #self.playerObj = pyglet.media.Player()
-        #self.sourceList = []
-        #for filename in self.fileList:
-        #     source = pyglet.media.load(self.filePath + filename)
-        #     self.sourceList.append(source)
-        #     self.playerObj.queue(source)
-        #self.playStart(70)
-        #------>
-
-        #event
-        #self.eventAction =EventAction(self)
-
-
-
     def setMousePot(self):
         #按钮焦点
         self.buttonCoordinate=[]
@@ -119,18 +70,6 @@ class MusicWidget(QWidget):
     #按钮事件
     def eventHandle(self,eventID,event):
         if eventID == 0:
-            print("移动播放轨道进度",event.pos().x())
-            # #当前歌曲（总长）
-            # print(self.homeAction.playObj.duration()/1000)
-            # totalDuration = int(self.homeAction.playObj.duration()/1000)
-            # #当前歌曲(已播放时间)
-            # pastTime = int(self.homeAction.playObj.position())
-            # location =(event.pos().x()-51)/self.section
-            # if location>=totalDuration:
-            #     location =totalDuration
-            # if location<100:
-            #     location=100
-            # self.homeAction.playObj.setPosition(location*100)
             print("移动播放轨道进度",event.pos().x())
             #当前歌曲（总长）
             totalDuration = int(self.homeAction.playObj.duration()/100)
@@ -180,29 +119,7 @@ class MusicWidget(QWidget):
             if downPos<0:
                 downPos=0
             self.tracksList.verticalScrollBar().setValue(downPos)
-
-    ##播放控制
-    #def playStart(self,i):
-    #    if self.isRandom==0:
-    #        pass
-    #    self.soundID=i
-    #    source = self.filePath + self.fileList[i]
-    #    print(source)
-    #    self.fileObj = pyglet.media.load(source)
-    #    self.playObj = pyglet.media.StaticSource(self.fileObj)
-    #    self.currentPlay = self.playObj.play()
-    #    self.currentPlay.pause()
-    #    self.currentPlay.eos_action=self.currentPlay.EOS_STOP
-    #    print("a",self.playObj.audio_format)
-    #    print("b",self.currentPlay._groups)
-    #
-    ##播放控制 （上一首）
-    #def prevPlay(self):
-    #    pass
-    #def xxte(self,event):
-    #    print(event)
-
-
+    
     def paintEvent(self, event):
         painter=QPainter(self)
         #设置渲染:开启抗锯齿,老机器很占cpu!

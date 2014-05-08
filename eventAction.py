@@ -75,25 +75,6 @@ class EventAction():
         self.playObj.setMedia(QMediaContent(QUrl.fromLocalFile(source)))
         self.playObj.play()
 
-
-        # self.fileObj = pyglet.media.load(source)
-        # self.playObj = self.fileObj.play()
-        # self.playObj._set_eos_action("stop")
-
-
-        # self.kkk=self.fileObj.play()
-        # kkk.pause()
-        # self.fileObj.delete()
-        #print("zhe1")
-        #self.playObj = pyglet.media.StaticSource(self.fileObj)
-        #print("zhe2")
-        #self.currentPlay = self.playObj.play()
-        #print("zhe3")
-        #self.currentPlay.volume = self.currentVolume
-
-        #aaaa = pyglet.media.get_source_loader()
-        # print( "zhe:::",pyglet.media.Source.audio_format)
-
     def testPlay(self):
         #ps =QMediaMetaData()
         #print("QMediaMetaData",ps)
@@ -103,16 +84,9 @@ class EventAction():
 
 
     #换歌之前先停止，释放内存
-    def stopPlay(self):
-        # print("文件全长:::",self.fileObj.duration)
-        # print("已播放:::",self.playObj.time)
-        # print("状态:::",self.playObj.playing)
-        # print("名称:::",self.fileObj.info.title)
-        # self.playObj.stop()
+    def stopPlay(self):       
         self.playObj.pause()
-        # self.playObj.on_player_eos()
-        # self.playObj.on_source_group_eos()
-        # self.playObj.on_eos()
+        
 
     #上一首
     def prevPlay(self):
