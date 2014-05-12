@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import (QPointF,QPoint, QRect, qRound, pyqtSlot,Qt, QTimer,QUrl)
+from PyQt5.QtCore import (QPointF,QPoint,QRectF, QRect, qRound, pyqtSlot,Qt, QTimer,QUrl)
 from PyQt5.QtWidgets import (QGraphicsView,QWidget,QGraphicsScene,QMessageBox,QFrame,QApplication)
-from PyQt5.QtGui import  (QImage,QPixmap,QPainter,QIcon)
+from PyQt5.QtGui import  (QImage,QPixmap,QPainter,QIcon,QPen,QBrush,QColor)
 from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaResource,QMediaPlaylist,QAudioDeviceInfo,QMediaMetaData)
 import time
 
@@ -13,8 +13,6 @@ import colors
 class Ui_MainWindow(QGraphicsView):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
-        # print(colors.CONFIGFILE.options('Save'))
-        #print(colors.CONFIGFILE.sections())
         #计算系统桌面尺寸
         self.countWwindowRect()
         #窗口默认尺寸
@@ -48,8 +46,6 @@ class Ui_MainWindow(QGraphicsView):
         #载入
         self.homeAction = EventAction()
         #==>初始化播放
-        # print(self.homeAction.fileList)
-        # print(self.homeAction.randomList)
         self.homeAction.initPlay()
         #初始化播放<<==
 
@@ -84,6 +80,12 @@ class Ui_MainWindow(QGraphicsView):
                             'phone':lambda :self.phoneEvent(),
                             }
         #===================================================================
+        #画个顶部背景
+        #self.parent.scene().addRect(QRectF(0,0,800,53),QPen(Qt.NoPen),QBrush(QPixmap(Colors.ImgPath+'topImg/topBG.png')))
+        self.scene().addRect(QRectF(0,0,800,53),QPen(Qt.NoPen),QBrush(QColor(230,230,219,120)))
+        #画个顶部和底部透明背景
+        self.scene().addRect(QRectF(0,427,800,53),QPen(Qt.NoPen),QBrush(QColor(230,230,219,120)))
+
         #底部按钮
         #底部按钮::静音
         mute  = ButtonPixmap(QPixmap('%simg/player/mute.png' % (colors.SYSPATH)),"mute")
@@ -241,7 +243,7 @@ class Ui_MainWindow(QGraphicsView):
         self.background = QPixmap(qRound(r.width()), qRound(r.height()))
         self.background.fill(Qt.black)
         painter = QPainter(self.background)
-        bg = QImage("%sBG.png" % (colors.SYSPATH))
+        bg = QImage("%simg/BG.png" % (colors.SYSPATH))
         painter.drawImage(0, 0, bg)
 
     #背景载入到场景
