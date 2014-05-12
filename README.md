@@ -13,6 +13,22 @@ eassy_install configparse
 图片都为图片格式，未转二进制，方便大家好看哈，各位看官可自行改着玩就好了
 
 
+打包成EXE
+============
+1、如果你要打包成EXE你将需要cx_Freeze包
+
+2、打包完成后你需要 将mediaservice文件夹复制到你打包好的程序位置
+
+3、mediaservice为QT的，你可以从你本面上复制 ，如（C:\Python33\Lib\site-packages\PyQt5\plugins\mediaservice）
+
+4、还要将img文件夹和config.ini文件复制到你打包好的位置
+
+5、打包
+
+5.1 在CMD里运行python setup.py install --install-exe exedist
+
+
+
 未完成功能
 ============
 1、清空列表

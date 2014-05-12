@@ -1,12 +1,14 @@
 __author__ = 'liaojie'
 #!/usr/bin/env python
 #coding:utf-8
-from PyQt5.QtCore import (QPointF, QRect, QRectF,Qt,QTimer,pyqtSignal,pyqtSlot,QUrl)
-from PyQt5.QtWidgets import (QWidget,QListWidget,QLineEdit,QFileDialog ,QApplication)
-from PyQt5.QtGui import (QPainter,QImage,QPolygonF,QPen,QFont,QColor,QDesktopServices)
+from PyQt5.QtCore import (QPointF, QRect, QRectF,Qt,QTimer,pyqtSignal,pyqtSlot)
+from PyQt5.QtWidgets import (QWidget,QListWidget)
+from PyQt5.QtGui import (QPainter,QImage,QPolygonF,QPen,QFont,QColor)
+
 from PyQt5.QtMultimedia import (QMediaMetaData)
 import time
 
+#==========自定义包
 import colors
 
 class MusicWidget(QWidget):
@@ -24,13 +26,14 @@ class MusicWidget(QWidget):
         #设置窗口计时器
         self.timer = QTimer()
         self.timer.timeout.connect(self.update)
-        self.timer.start(120)
+        self.timer.start(30)
 
         #==>载入按钮坐标
         self.setMousePot()
         #歌曲列表界面
         self.tracksList = TracksList(self)
 
+        self.test=1
 
     def setMousePot(self):
         #按钮焦点
@@ -53,11 +56,14 @@ class MusicWidget(QWidget):
                 self.eventHandle(i,event)
     #
     def mouseDoubleClickEvent(self, QMouseEvent):
-        print("鼠标双击")
+        #print("鼠标双击")
+        pass
     def mouseMoveEvent(self, QMouseEvent):
-        print("鼠标移动")
+        #print("鼠标移动")
+        pass
     def mouseReleaseEvent(self, QMouseEvent):
-        print("鼠标释放")
+        #print("鼠标释放")
+        pass
 
     #检查鼠标按下时是否在铵钮的坐标上
     def checkCoordinate(self,a,b):
@@ -71,13 +77,13 @@ class MusicWidget(QWidget):
     #按钮事件
     def eventHandle(self,eventID,event):
         if eventID == 0:
-            print("移动播放轨道进度",event.pos().x())
+            #print("移动播放轨道进度",event.pos().x())
             #当前歌曲（总长）
             totalDuration = int(self.homeAction.playObj.duration()/100)
             #当前歌曲(已播放时间)
             # pastTime = int(self.homeAction.playObj.time*10)
             location =int((event.pos().x()-51)/self.section)
-            print("sssssssssss",location,self.homeAction.playObj.duration(),totalDuration)
+            #print("sssssssssss",location,self.homeAction.playObj.duration(),totalDuration)
 
             if location>=totalDuration*100:
                 location =totalDuration
@@ -85,13 +91,13 @@ class MusicWidget(QWidget):
                 location=100
             self.homeAction.playObj.setPosition(int(location))
         if eventID == 1:
-            print("点击预览按钮",event.pos().x())
+            #print("点击预览按钮",event.pos().x())
             if self.homeAction.isPreview:
                 self.homeAction.isPreview =0
             else:
                 self.homeAction.isPreview =1
         if eventID == 2:
-            print("点击随机按钮",event.pos().x())
+            #print("点击随机按钮",event.pos().x())
             if self.homeAction.isRandom:
                 #将随机改为顺序
                 self.homeAction.isRandom = 0
@@ -103,19 +109,19 @@ class MusicWidget(QWidget):
                 self.homeAction.shuffleMusic(1)
                 print(self.homeAction.randomList)
         if eventID == 3:
-            print("点击循环按钮",event.pos().x())
+            #print("点击循环按钮",event.pos().x())
             if self.homeAction.isLoop:
                 self.homeAction.isLoop = 0
             else:
                 self.homeAction.isLoop = 1
         if eventID == 4:
-            print("点击列表向上按钮",event.pos().x())
+            #print("点击列表向上按钮",event.pos().x())
             upPos = self.tracksList.verticalScrollBar().value()-9
             if upPos<0:
                 upPos=0
             self.tracksList.verticalScrollBar().setValue(upPos)
         if eventID == 5:
-            print("点击列表向下按钮",event.pos().x())
+            #print("点击列表向下按钮",event.pos().x())
             downPos = self.tracksList.verticalScrollBar().value()+9
             if downPos<0:
                 downPos=0
@@ -143,7 +149,7 @@ class MusicWidget(QWidget):
         laveTime = totalDuration - pastTime
         # if pastTime>=totalDuration:
         if self.homeAction.playObj.mediaStatus()==7:
-            print("zhe::::")
+            #print("zhe::::")
             if self.homeAction.isLoop==1:#是否单循环
                 self.homeAction.playObj.setPosition(0)
                 self.homeAction.playObj.play()
@@ -344,7 +350,7 @@ class TracksList(QListWidget):
     def setValue_OneParameter(self,nIndex):
         #临时这样写吧！播放点击列表中的歌曲
         clickedTracksId = int(nIndex.text().split('.')[0])
-        print("点击：",clickedTracksId)
+        #print("点击：",clickedTracksId)
         self.parent.homeAction.stopPlay()
         self.parent.homeAction.soundID = clickedTracksId
         self.parent.homeAction.play(clickedTracksId)

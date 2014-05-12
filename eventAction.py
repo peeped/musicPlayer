@@ -4,6 +4,7 @@ __author__ = 'liaojie'
 import os,random
 import configparser
 from PyQt5.QtCore import QUrl
+
 from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaMetaData)
 class EventAction():
     def __init__(self):
@@ -76,35 +77,36 @@ class EventAction():
     def testPlay(self):
         #ps =QMediaMetaData()
         #print("QMediaMetaData",ps)
-        print("metaData",self.playObj.metaData(QMediaMetaData.Title))
-        print("position",self.playObj.position())
-        print("playlist",self.playObj.playlist)
-        print("availability",self.playObj.availability())
-        print("bufferStatus",self.playObj.bufferStatus())
-        print("currentMedia",self.playObj.currentMedia())
-        print("currentNetworkConfiguration",self.playObj.currentNetworkConfiguration())
-        print("duration",self.playObj.duration())
-        print("error",self.playObj.error())
-        print("errorString",self.playObj.errorString())
-        print("isAudioAvailable",self.playObj.isAudioAvailable())
-        print("isMuted",self.playObj.isMuted())
-        print("isSeekable",self.playObj.isSeekable())
-        print("media",self.playObj.media())
-        print("media:::::::A",self.playObj.media().canonicalResource().audioBitRate())
-        print("media:::::::B",self.playObj.media().canonicalResource().audioCodec())
-        print("media:::::::C",self.playObj.media().canonicalResource().channelCount())
-        print("media:::::::D",self.playObj.media().canonicalResource().dataSize())
-        print("media:::::::e",self.playObj.media().canonicalResource().isNull())
-        print("media:::::::f",self.playObj.media().canonicalResource().language())
-        print("media:::::::g",self.playObj.media().canonicalResource().mimeType())
-        print("media:::::::h",self.playObj.media().canonicalResource().request())
-        print("isVideoAvailable",self.playObj.isVideoAvailable())
-        print("mediaStatus",self.playObj.mediaStatus())
-        print("mediaStream",self.playObj.mediaStream())
-        print("playbackRate",self.playObj.playbackRate())
-        print("state",self.playObj.state())
-        print("volume",self.playObj.volume())
+        #print("metaData",self.playObj.metaData(QMediaMetaData.Title))
+        #print("position",self.playObj.position())
+        #print("playlist",self.playObj.playlist)
+        #print("availability",self.playObj.availability())
+        #print("bufferStatus",self.playObj.bufferStatus())
+        #print("currentMedia",self.playObj.currentMedia())
+        #print("currentNetworkConfiguration",self.playObj.currentNetworkConfiguration())
+        #print("duration",self.playObj.duration())
+        #print("error",self.playObj.error())
+        #print("errorString",self.playObj.errorString())
+        #print("isAudioAvailable",self.playObj.isAudioAvailable())
+        #print("isMuted",self.playObj.isMuted())
+        #print("isSeekable",self.playObj.isSeekable())
+        #print("media",self.playObj.media())
+        #print("media:::::::A",self.playObj.media().canonicalResource().audioBitRate())
+        #print("media:::::::B",self.playObj.media().canonicalResource().audioCodec())
+        #print("media:::::::C",self.playObj.media().canonicalResource().channelCount())
+        #print("media:::::::D",self.playObj.media().canonicalResource().dataSize())
+        #print("media:::::::e",self.playObj.media().canonicalResource().isNull())
+        #print("media:::::::f",self.playObj.media().canonicalResource().language())
+        #print("media:::::::g",self.playObj.media().canonicalResource().mimeType())
+        #print("media:::::::h",self.playObj.media().canonicalResource().request())
+        #print("isVideoAvailable",self.playObj.isVideoAvailable())
+        #print("mediaStatus",self.playObj.mediaStatus())
+        #print("mediaStream",self.playObj.mediaStream())
+        #print("playbackRate",self.playObj.playbackRate())
+        #print("state",self.playObj.state())
+        #print("volume",self.playObj.volume())
         # print("volume",self.playObj.filename)
+        pass
 
 
 
@@ -138,11 +140,12 @@ class EventAction():
             self.soundID+=1
             if self.soundID > (len(self.randomList)-1):
                 self.soundID = 0
-        print("next:::",self.soundID)
+        #print("next:::",self.soundID)
         self.play(self.soundID)
 
     #快退
     def rewindPlay(self):
+        #print("<<")
         rewindTime = int(self.playObj.position()) - 10*1000
         if rewindTime < 0:
             rewindTime = 0
@@ -150,9 +153,10 @@ class EventAction():
 
     #快进
     def forwardPlay(self):
+        #print(">>")
         forwardTime = int(self.playObj.position()) + 10*1000
-        if forwardTime > int(self.playObj.position()):
-            forwardTime = int(self.playObj.position())
+        if forwardTime > int(self.playObj.duration()):
+            forwardTime = int(self.playObj.duration())
         self.playObj.setPosition(forwardTime)
 
     #播放/暂停

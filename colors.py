@@ -3,4 +3,5 @@ __author__ = 'liaojie'
 #coding:utf-8
 import sys
 CONFIGFILE = ""
-SYSPATH = '%s/'%(sys.path[0])
+#SYSPATH = '%s/'%(sys.path[0])
+SYSPATH = './'

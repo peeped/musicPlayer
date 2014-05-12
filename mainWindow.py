@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import (QRectF,QPointF,QPoint, QRect, qRound, Qt,QTimer,pyqtSlot)
-from PyQt5.QtWidgets import (QGraphicsView,QApplication,QWidget,QGraphicsScene,QMessageBox,QFrame)
-from PyQt5.QtGui import  (QImage,QPixmap,QPainter,QColor,QIcon,QPen,QBrush)
-
-from PyQt5.QtCore import QByteArray, QIODevice, Qt, QTimer, QUrl
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaPlaylist)
+from PyQt5.QtCore import (QPointF,QPoint, QRect, qRound, pyqtSlot,Qt, QTimer,QUrl)
+from PyQt5.QtWidgets import (QGraphicsView,QWidget,QGraphicsScene,QMessageBox,QFrame,QApplication)
+from PyQt5.QtGui import  (QImage,QPixmap,QPainter,QIcon)
+from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaResource,QMediaPlaylist,QAudioDeviceInfo,QMediaMetaData)
 import time
-# import win32gui
+
 #==========自定义包
-#from colors import Colors
-#from modules.buttonPixmap import ButtonPixmap
-#from uiAction.mainUi import MainUi
-#from modules.mainMod import MainMod
 from musicWidget import MusicWidget
 from buttonPixmap import ButtonPixmap
 from eventAction import EventAction
@@ -21,7 +14,7 @@ class Ui_MainWindow(QGraphicsView):
     def __init__(self, parent=None):
         super(Ui_MainWindow, self).__init__(parent)
         # print(colors.CONFIGFILE.options('Save'))
-        print(colors.CONFIGFILE.sections())
+        #print(colors.CONFIGFILE.sections())
         #计算系统桌面尺寸
         self.countWwindowRect()
         #窗口默认尺寸
@@ -211,7 +204,8 @@ class Ui_MainWindow(QGraphicsView):
             if type=="press":
                 self.loadItem(nIndex)
         except EOFError:
-            print("no such command.",EOFError)
+            pass
+            #print("no such command.",EOFError)
 
     #全屏事件
     def toggleFullscreen(self):
@@ -289,10 +283,39 @@ class Ui_MainWindow(QGraphicsView):
         elif event.key() == Qt.Key_F:
             self.toggleFullscreen()
         elif event.key() == Qt.Key_F1:
+            #playList=QMediaPlaylist()
+            #playList.setPlaybackMode(QMediaPlaylist.Loop)
+            #playList.addMedia(QMediaContent(QUrl.fromLocalFile("f:/mp3/qh.mp3")))
+            #player = QMediaPlayer()
+            #player.setPlaylist(playList)
+            #player.play()
+            #print(player.metaData(QMediaMetaData.Author))
+            #
+            #m_device = QAudioDeviceInfo.defaultOutputDevice()
+            #print(m_device)
+            #self.xxx = QMediaPlayer()
+
+            #self.xxx.setMedia(QMediaContent(QUrl.fromLocalFile("yinpin.wav")))
+            #self.xxx.setMedia(QMediaContent(QUrl.fromUserInput("http://192.168.20.200/qh.mp3")))
+            #self.xxx.play()
+            #qq = QUrl()
+            #qq.setPath("f:/mp3/")
+            #qq = QUrl.fromUserInput("http://192.168.20.200/qh.mp3")
+
+            #print(qq)
+            #ss=QMediaContent(QUrl.fromLocalFile("yinpin.wav"))
+            #sss=QMediaContent(QUrl.fromLocalFile(""))
             s = "这是一个正在开发的东西，慢慢来吧：\n"
             w = QWidget()
             s += "\n[色位深度]: %d" % w.depth()
             s += "\n[动画支持]: "
+            s += "\n[bufferStatus]: "+str(self.homeAction.playObj.bufferStatus())
+            s += "\n[position]: "+str(self.homeAction.playObj.position())
+            s += "\n[state]: "+str(self.homeAction.playObj.state())
+            s += "\n[filePath]: "+self.homeAction.openPath
+            #s += "\n[xxxx]: "+str(ss)
+            #s += "\n[sss]: "+str(sss)
+            #s += "\n[qqq]: "+qq.scheme()
             #s += ["on", "off"][Colors.noAnimations]
             QMessageBox.information(None, "【F1】你想知道什么：", s)
         super(Ui_MainWindow, self).keyPressEvent(event)
