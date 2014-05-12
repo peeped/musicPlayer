@@ -13,4 +13,4 @@ setup(name='musicPlayer',
       version = '1.0',
       description = 'musicPlayer',
       options = {"build_exe": build_exe_options},
-      executables = [Executable("run.pyw", base=base)])
+      executables = [Executable("run.pyw", base=base,icon="img/icon/05.ico")])
