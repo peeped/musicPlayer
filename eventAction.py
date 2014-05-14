@@ -1,9 +1,9 @@
 __author__ = 'liaojie'
 #!/usr/bin/env python
 #coding:utf-8
-import os,random
+import os,random,string,time
 import configparser
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl,QFile,QIODevice
 
 from PyQt5.QtMultimedia import (QMediaPlayer,QMediaContent,QMediaMetaData)
 class EventAction():
@@ -25,6 +25,10 @@ class EventAction():
         self.openDir()
         #打开目录<<==
         self.playObj = QMediaPlayer()
+
+        self.currentImg = ""    #当前图片
+        self.songText = {}      #歌词
+        self.songTextKey=[]     #歌词KEY
 
 
 
@@ -72,6 +76,21 @@ class EventAction():
     def play(self,i):
         source = self.openPath + self.fileList[i]
         self.playObj.setMedia(QMediaContent(QUrl.fromLocalFile(source)))
+        #解析文件中的ID3V2
+        self.currentImg = ""
+        f = QFile(source)
+        if f.open(QIODevice.ReadOnly):
+            #读取标签
+            headData = f.read(10)
+            data = headData[:0]
+            if self.id3v2(headData):#检测是否有ID3
+                #标签的大小计算
+                tag = headData[6:10]
+                tagSize = (tag[0]&0x7f)*0x200000+(tag[1]&0x7f)*0x4000+(tag[2]&0x7f)*0x80+(tag[3]&0x7f)
+                data =f.read(tagSize)
+                while len(data)>10:
+                    data = self.resolve(data)
+        f.close()
         self.playObj.play()
 
     def testPlay(self):
@@ -189,3 +208,60 @@ class EventAction():
             if item ==v:
                 return index
         return 0
+
+    #解析文件中是否有id3v2
+    def id3v2(self,headData):
+        if str(headData[:3],encoding=("utf-8")) != "ID3":
+            return False
+        return True
+
+    #解析文件中的歌词与图片
+    def resolve(self,data):
+        tagName =  str(data[:4],encoding=("utf-8"))
+        size = data[4:8]
+        #sizeS = size[0]*0x1000000 + size[1]*0x10000 + size[2]*0x100 + size[3]
+        sizeS=int.from_bytes(size, byteorder='big')
+        flags = data[8:10]
+        tagContent = data[10:sizeS+10]
+
+        if tagName=="TEXT":#歌词
+            #print("歌词")
+            condingType=int.from_bytes(tagContent[:1], byteorder='big')
+            if condingType == 0:#0代表字符使用ISO-8859-1编码方式；
+                try:
+                    content = str(tagContent[1:],encoding="gbk")
+                except:
+                    content =""
+            elif condingType == 1:#1代表字符使用UTF-16编码方式；
+                try:
+                    content = str(tagContent[1:],encoding="UTF-16")
+                except:
+                    content =""
+            elif condingType == 2:#2代表字符使用 UTF-16BE编码方式；
+                content =""
+            elif condingType == 3:#3代表字符使用UTF-8编码方式。
+                try:
+                    content = str(tagContent[1:],encoding="UTF-8")
+                except:
+                    content =""
+            if content!="":
+                temp={}
+                self.songTextKey=[]
+                contentSplit = content.splitlines()
+                for k in range(len(contentSplit)):
+                    if contentSplit[k][1].isdigit():
+                        xxx = contentSplit[k].split("]")
+                        tempKey = "%d" %(int(xxx[0][1:3])*60 +int(xxx[0][4:6]) )
+                        temp[str(tempKey)] = xxx[1]
+                        self.songTextKey.append(tempKey)
+                    else:
+                        endKey = contentSplit[k].find("]",0)
+                        self.songTextKey.append(k)
+                        temp[str(k)] = contentSplit[k][1:endKey]
+                self.songText = temp
+            else:
+                self.songText = {}
+        elif tagName=="APIC":#图片
+            #print("图片")
+            self.currentImg = tagContent[17:]
+        return data[10+sizeS:]

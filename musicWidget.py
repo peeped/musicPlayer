@@ -3,7 +3,7 @@ __author__ = 'liaojie'
 #coding:utf-8
 from PyQt5.QtCore import (QPointF, QRect, QRectF,Qt,QTimer,pyqtSignal,pyqtSlot)
 from PyQt5.QtWidgets import (QWidget,QListWidget)
-from PyQt5.QtGui import (QPainter,QImage,QPolygonF,QPen,QFont,QColor)
+from PyQt5.QtGui import (QPainter,QImage,QPolygonF,QPen,QFont,QColor,QPixmap)
 
 from PyQt5.QtMultimedia import (QMediaMetaData)
 import time
@@ -208,10 +208,14 @@ class MusicWidget(QWidget):
         painter.setBrush(Qt.white)
         painter.setPen(QPen(QColor(176,178,177,255),1))
         painter.drawRect(QRect(270,105,160,160))
-        #painter.setBrush(Qt.white)
-        #painter.setPen(QPen(Qt.gray,0.5))
-        #painter.drawRect(QRect(276,111,148,148))
         painter.drawImage(QRectF(275,110,150,150), QImage("%simg/music/nonePhoto.png" % (colors.SYSPATH)), QRectF(0.0, 0.0, 150.0, 150.0))#测试照片
+        if self.homeAction.currentImg!="":
+            photos = QImage()
+            photos.loadFromData(self.homeAction.currentImg, "JPG")
+            newImg = photos.scaled(150,150)
+            painter.drawImage(QRectF(275,110,150,150),newImg, QRectF(0.0, 0.0, 150.0, 150.0))#测试照片
+
+
     #画轨道条上面的照片背景END<<==
 
     #添加艺术家图标和歌曲标题图标==>
@@ -261,6 +265,16 @@ class MusicWidget(QWidget):
         painter.drawText(QPointF(640,358),"添加")#随机
         painter.drawText(QPointF(565,358),"清空")#随机
     #按扭文字 循环  随机 预览 清空列表 增加文件夹 增加文件  END<<==
+
+    #歌词==>
+        painter.setFont(QFont("微软雅黑",20))
+        #print(self.homeAction.songText)
+        for key,v in enumerate(self.homeAction.songTextKey):
+            if int(v) > int(pastTime/1000):
+                strKey = self.homeAction.songTextKey[key-1]
+                painter.drawText(QPointF(40,340),self.homeAction.songText[str(strKey)])#当前歌词
+                break
+    #歌词<<==
 
     #画右侧列表背景 ==>
         painter.setPen(QPen(Qt.NoPen))
@@ -327,6 +341,8 @@ class MusicWidget(QWidget):
         painter.drawImage(QRectF(615,344,20,20), QImage("%smusic/icon.png" % (colors.SYSPATH)), QRectF(60.0, 20.0, 20.0, 20.0))#增加文件
         painter.drawImage(QRectF(690,342.5,20,20), QImage("%smusic/icon.png" % (colors.SYSPATH)), QRectF(60.0, 40.0, 20.0, 20.0))#增加文件夹
     #画按钮的图标 循环  随机 预览 清空列表 增加文件夹 增加文件  END<<==
+
+
 
 
 #播放列表显示
